@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+std::stack<char>operatii;
+std::stack<long long>numere;
+std::string ec;
+std::pair<long long,int> numar(std::string ec,int i)
+{
+    long long ans=0;
+    while(i<ec.size()&&int(ec[i])<=57&&int(ec[i])>=48)
+    {
+        ans*=10;
+        ans+=(int(ec[i])-48);
+        i++;
+    }
+    return std::make_pair(ans,--i);
+}
+int main()
+{
+    getline(std::cin,ec);
+    char semn='+';
+    for(int i=0;i<ec.size();i++)
+    {
+        if(int(ec[i])<=57&&int(ec[i])>=48)
+        {
+            std::pair<long long,int>p=numar(ec,i);
+            if(semn=='+')
+            numere.push(p.first);
+            else if(semn=='-') numere.push((-1)*p.first);
+            i=p.second;
+        }
+        else if(ec[i]=='-')
+        {
+            semn='-';
+        }
+        else if(ec[i]=='+')
+        {
+            semn='+';
+        }
+        else if(ec[i]=='*')
+        {
+            i++;
+            std::pair<long long,int>p=numar(ec,i);
+            numere.top()*=p.first;
+            i=p.second;
+        }
+    }
+    long long ans=0;
+    while(!numere.empty())
+    {
+        //std::cout<<numere.top()<<' ';
+        ans+=numere.top();
+        numere.pop();
+    }
+    std::cout<<ans;
+    return 0;
+}
